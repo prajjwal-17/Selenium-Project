@@ -15,7 +15,7 @@ A comprehensive Python-based web scraper for Amazon India product pages. This pr
 ## Project Structure
 
 ```
-amazon-product-scraper/
+Selenium-Project/
 │
 ├── project.py              # Main Selenium scraper (saves HTML files)
 ├── finalcollect.py         # HTML processor (extracts data to JSON)
@@ -43,8 +43,8 @@ amazon-product-scraper/
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/amazon-product-scraper.git
-cd amazon-product-scraper
+git clone https://github.com/yourusername/Selenium-Project.git
+cd Selenium-Project
 ```
 
 2. Install required dependencies:
