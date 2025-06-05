@@ -1,37 +1,41 @@
 # Amazon Product Scraper
 
-A Python-based web scraper for extracting product information from Amazon India product pages. This tool processes HTML files stored locally and extracts product titles, prices, and links, saving the data in JSON format.
+A comprehensive Python-based web scraper for Amazon India product pages. This project uses Selenium for automated web scraping to collect product HTML files, and BeautifulSoup for parsing and extracting product information into structured JSON format.
 
 ## Features
 
-- 🔍 Extracts product titles, prices, and links from Amazon HTML files
-- 💾 Saves scraped data to JSON format with UTF-8 encoding
-- 🛡️ Error handling for malformed HTML files
-- 📊 Progress tracking with console output
-- 🇮🇳 Specifically designed for Amazon India (amazon.in)
+- 🔍 **Automated Web Scraping**: Uses Selenium to scrape Amazon India product pages
+- 💾 **HTML File Storage**: Saves scraped HTML files locally for processing
+- 📊 **Data Extraction**: Extracts product titles, prices, and links from HTML files
+- 💼 **JSON Output**: Saves structured data to JSON format with UTF-8 encoding
+- 🛡️ **Error Handling**: Robust error handling for malformed HTML files
+- 📈 **Progress Tracking**: Real-time progress tracking with console output
+- 🇮🇳 **Amazon India Focus**: Specifically designed for Amazon India (amazon.in)
 
 ## Project Structure
 
 ```
 amazon-product-scraper/
 │
-├── project.py              # Main scraper script
-├── finalcollect.py         # Final collection script (duplicate of project.py)
+├── project.py              # Main Selenium scraper (saves HTML files)
+├── finalcollect.py         # HTML processor (extracts data to JSON)
 ├── collect.py              # Test script for development
 ├── locating_single.py      # Test script for single element extraction
 ├── locating_multiple.py    # Test script for multiple element extraction
-├── data/                   # Directory containing HTML files to process
+├── data/                   # Directory containing scraped HTML files
 │   ├── product1.html
 │   ├── product2.html
 │   └── ...
-├── products.json           # Output file with scraped data
+├── products.json           # Final output file with extracted data
 └── README.md
 ```
 
 ## Requirements
 
 - Python 3.6+
+- Selenium
 - BeautifulSoup4
+- Chrome/Firefox WebDriver
 - os (built-in)
 - json (built-in)
 
@@ -45,32 +49,57 @@ cd amazon-product-scraper
 
 2. Install required dependencies:
 ```bash
-pip install beautifulsoup4
+pip install selenium beautifulsoup4
 ```
 
-3. Create a `data` directory and place your Amazon HTML files inside:
+3. Install WebDriver:
+   - **Chrome**: Download [ChromeDriver](https://chromedriver.chromium.org/) and add to PATH
+   - **Firefox**: Download [GeckoDriver](https://github.com/mozilla/geckodriver/releases) and add to PATH
+
+4. Create a `data` directory for storing HTML files:
 ```bash
 mkdir data
-# Add your HTML files to the data directory
 ```
 
 ## Usage
 
-### Main Script
+## Usage
 
-Run the main scraper script:
+### Step 1: Scrape Product Pages (Selenium)
+
+First, run the main scraper to collect HTML files from Amazon:
 
 ```bash
 python project.py
 ```
 
-or
+This script will:
+- Launch a web browser using Selenium
+- Navigate to Amazon India product pages
+- Save HTML content to individual files in the `data` directory
+- Handle dynamic content and page loading
+
+### Step 2: Extract Data from HTML Files
+
+Then, process the collected HTML files to extract structured data:
 
 ```bash
 python finalcollect.py
 ```
 
-Both scripts perform the same function - extracting product data from HTML files in the `data` directory.
+This script will:
+- Process all HTML files in the `data` directory
+- Extract product information (title, price, link)
+- Display progress in the console
+- Save results to `products.json`
+
+### Workflow
+
+```
+Amazon India → [Selenium] → HTML Files → [BeautifulSoup] → JSON Data
+     ↓              ↓            ↓              ↓             ↓
+  Live Pages → project.py → data/*.html → finalcollect.py → products.json
+```
 
 ### Output
 
@@ -127,19 +156,30 @@ These scripts are used for development purposes and testing different extraction
 
 ## How It Works
 
-1. **File Processing**: The script iterates through all files in the `data` directory
-2. **HTML Parsing**: Uses BeautifulSoup to parse HTML content
+### Phase 1: Web Scraping (project.py)
+1. **Browser Automation**: Uses Selenium to control a web browser
+2. **Page Navigation**: Navigates to Amazon India product pages
+3. **Dynamic Content**: Waits for pages to fully load including JavaScript content
+4. **HTML Collection**: Saves complete HTML content to individual files in `data/` directory
+5. **Error Handling**: Handles network issues, timeouts, and page loading errors
+
+### Phase 2: Data Extraction (finalcollect.py)
+1. **File Processing**: Iterates through all HTML files in the `data` directory
+2. **HTML Parsing**: Uses BeautifulSoup to parse saved HTML content
 3. **Element Extraction**:
    - Finds product title from `<h2>` tags
    - Extracts price from `<span class="a-price-whole">`
    - Constructs product link from parent anchor tag
 4. **Data Cleaning**: Removes extra whitespace and formatting
-5. **Error Handling**: Continues processing even if individual files fail
-6. **Output**: Saves clean JSON data with proper encoding
+5. **JSON Output**: Saves clean, structured data with proper encoding
 
 ## Data Sources
 
-This scraper is designed to work with HTML files from Amazon India product pages. The HTML files should be saved locally in the `data` directory before running the script.
+This scraper works in two phases:
+1. **Live Scraping**: `project.py` uses Selenium to scrape live Amazon India product pages
+2. **Local Processing**: `finalcollect.py` processes the locally saved HTML files
+
+The scraper can handle dynamic content that loads via JavaScript, making it more robust than simple HTTP request-based scrapers.
 
 ## Error Handling
 
@@ -150,10 +190,11 @@ The script includes comprehensive error handling:
 
 ## Limitations
 
-- Only works with Amazon India (amazon.in) product pages
-- Requires pre-downloaded HTML files
+- Requires WebDriver installation (Chrome/Firefox)
+- May be affected by Amazon's anti-bot measures
 - Dependent on Amazon's HTML structure (may break if Amazon changes their layout)
-- Does not handle dynamic content loaded by JavaScript
+- Scraping speed limited by page load times and politeness delays
+- Requires stable internet connection for initial scraping phase
 
 ## Contributing
 
